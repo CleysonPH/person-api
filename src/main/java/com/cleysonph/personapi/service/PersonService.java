@@ -1,7 +1,9 @@
 package com.cleysonph.personapi.service;
 
-import com.cleysonph.personapi.dto.MessageResponseDTO;
+import com.cleysonph.personapi.dto.request.PersonDTO;
+import com.cleysonph.personapi.dto.response.MessageResponseDTO;
 import com.cleysonph.personapi.entity.Person;
+import com.cleysonph.personapi.mapper.PersonMapper;
 import com.cleysonph.personapi.repository.PersonRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,10 @@ public class PersonService {
         this.personRepository = personRepository;
     }
 
-    public MessageResponseDTO createPerson(Person person) {
-        Person savedPerson = personRepository.save(person);
+    public MessageResponseDTO createPerson(PersonDTO personDTO) {
+        Person personToSave = PersonMapper.toModel(personDTO);
+
+        Person savedPerson = personRepository.save(personToSave);
 
         return MessageResponseDTO
                 .builder()

@@ -1,4 +1,4 @@
-package com.cleysonph.personapi.dto;
+package com.cleysonph.personapi.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

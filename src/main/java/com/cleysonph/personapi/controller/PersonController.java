@@ -1,7 +1,9 @@
 package com.cleysonph.personapi.controller;
 
-import com.cleysonph.personapi.dto.MessageResponseDTO;
-import com.cleysonph.personapi.entity.Person;
+import javax.validation.Valid;
+
+import com.cleysonph.personapi.dto.request.PersonDTO;
+import com.cleysonph.personapi.dto.response.MessageResponseDTO;
 import com.cleysonph.personapi.service.PersonService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +27,8 @@ public class PersonController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public MessageResponseDTO createPerson(@RequestBody Person person) {
-        return personService.createPerson(person);
+    public MessageResponseDTO createPerson(@RequestBody @Valid PersonDTO personDTO) {
+        return personService.createPerson(personDTO);
     }
 
 }
