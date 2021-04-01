@@ -1,11 +1,13 @@
 package com.cleysonph.personapi.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.cleysonph.personapi.dto.request.PersonDTO;
 import com.cleysonph.personapi.dto.response.MessageResponseDTO;
 import com.cleysonph.personapi.entity.Person;
+import com.cleysonph.personapi.exception.PersonNotFoundException;
 import com.cleysonph.personapi.mapper.PersonMapper;
 import com.cleysonph.personapi.repository.PersonRepository;
 
@@ -39,6 +41,13 @@ public class PersonService {
         return allPeople.stream()
                 .map(PersonMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public PersonDTO findById(Long id) throws PersonNotFoundException {
+        Person person = personRepository.findById(id)
+            .orElseThrow(() -> new PersonNotFoundException(id));
+
+        return PersonMapper.toDTO(person);
     }
 
 }
