@@ -7,9 +7,9 @@ import com.cleysonph.personapi.dto.request.PersonDTO;
 import com.cleysonph.personapi.dto.response.MessageResponseDTO;
 import com.cleysonph.personapi.entity.Person;
 import com.cleysonph.personapi.exception.PersonNotFoundException;
-import com.cleysonph.personapi.mapper.PersonMapper;
 import com.cleysonph.personapi.repository.PersonRepository;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +18,16 @@ public class PersonService {
 
     private PersonRepository personRepository;
 
+    private ModelMapper modelMapper;
+
     @Autowired
-    public PersonService(PersonRepository personRepository) {
+    public PersonService(PersonRepository personRepository, ModelMapper modelMapper) {
         this.personRepository = personRepository;
+        this.modelMapper = modelMapper;
     }
 
     public MessageResponseDTO createPerson(PersonDTO personDTO) {
-        Person personToSave = PersonMapper.toModel(personDTO);
+        Person personToSave = modelMapper.map(personDTO, Person.class);
 
         Person savedPerson = personRepository.save(personToSave);
 
@@ -35,14 +38,14 @@ public class PersonService {
         List<Person> allPeople = personRepository.findAll();
 
         return allPeople.stream()
-                .map(PersonMapper::toDTO)
+                .map(person -> modelMapper.map(person, PersonDTO.class))
                 .collect(Collectors.toList());
     }
 
     public PersonDTO findById(Long id) throws PersonNotFoundException {
         Person person = verifyIfExists(id);
 
-        return PersonMapper.toDTO(person);
+        return modelMapper.map(person, PersonDTO.class);
     }
 
     public void delete(Long id) throws PersonNotFoundException {
@@ -54,7 +57,7 @@ public class PersonService {
     public MessageResponseDTO updateById(Long id, PersonDTO personDTO) throws PersonNotFoundException {
         verifyIfExists(id);
 
-        Person personToUpdate = PersonMapper.toModel(personDTO);
+        Person personToUpdate = modelMapper.map(personDTO, Person.class);
         personToUpdate.setId(id);
 
         Person updatedPerson = personRepository.save(personToUpdate);
