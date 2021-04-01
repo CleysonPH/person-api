@@ -1,5 +1,8 @@
 package com.cleysonph.personapi.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.cleysonph.personapi.dto.request.PersonDTO;
 import com.cleysonph.personapi.dto.response.MessageResponseDTO;
 import com.cleysonph.personapi.entity.Person;
@@ -28,6 +31,14 @@ public class PersonService {
                 .builder()
                 .message("Created person with ID " + savedPerson.getId())
                 .build();
+    }
+
+    public List<PersonDTO> listAll() {
+        List<Person> allPeople = personRepository.findAll();
+
+        return allPeople.stream()
+                .map(PersonMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
 }

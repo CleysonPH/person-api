@@ -7,15 +7,20 @@ public class PhoneMapper {
 
     public static Phone toModel(PhoneDTO phoneDTO) {
         return Phone
-                .builder()
-                .type(phoneDTO.getType())
-                .number(phoneDTO.getNumber())
-                .build();
+            .builder()
+            .id(phoneDTO.getId())
+            .type(phoneDTO.getType())
+            .number(phoneDTO.getNumber())
+            .build();
     }
 
     public static PhoneDTO toDTO(Phone phone) {
-        // TODO
-        return null;
+        return PhoneDTO
+            .builder()
+            .id(phone.getId())
+            .type(phone.getType())
+            .number(phone.getNumber())
+            .build();
     }
 
 }
