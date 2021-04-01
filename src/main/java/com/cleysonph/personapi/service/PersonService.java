@@ -1,7 +1,6 @@
 package com.cleysonph.personapi.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.cleysonph.personapi.dto.request.PersonDTO;
@@ -44,10 +43,20 @@ public class PersonService {
     }
 
     public PersonDTO findById(Long id) throws PersonNotFoundException {
-        Person person = personRepository.findById(id)
-            .orElseThrow(() -> new PersonNotFoundException(id));
+        Person person = verifyIfExists(id);
 
         return PersonMapper.toDTO(person);
+    }
+
+    public void delete(Long id) throws PersonNotFoundException {
+        verifyIfExists(id);
+
+        personRepository.deleteById(id);
+    }
+
+    public Person verifyIfExists(Long id) throws PersonNotFoundException {
+        return personRepository.findById(id)
+            .orElseThrow(() -> new PersonNotFoundException(id));
     }
 
 }
